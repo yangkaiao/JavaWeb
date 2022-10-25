@@ -53,6 +53,11 @@ public class CartServlet extends ViewBaseServlet {
             this.clearCart(req,resp);
         }
 
+        //更改购物车图书项数量
+        if(req.getParameter("method").equals("updateBookCount")){
+            this.updateBookCount(req,resp);
+        }
+
 
         //以下代码：主页每点一次加入购物车 导航栏的购物车的数量就会实时更新
         User user = (User)req.getSession().getAttribute("currUser");//登录成功后的用户
@@ -92,6 +97,15 @@ public class CartServlet extends ViewBaseServlet {
         HttpSession session = req.getSession();
         User user = (User)session.getAttribute("currUser");//登录成功后的用户
         cartItemService.clearCartItem(Integer.valueOf(user.getUserId()));
+        resp.sendRedirect("/JavaWeb/Cart?method=cart");
+    }
+
+    //更改购物车图书项数量
+    private void updateBookCount(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String cartId = req.getParameter("cartId");
+        String bookCount = req.getParameter("bookCount");
+        CartItem cartItem = new CartItem(Integer.valueOf(cartId),Integer.valueOf(bookCount));
+        cartItemService.updateCartItem(cartItem);
         resp.sendRedirect("/JavaWeb/Cart?method=cart");
     }
 

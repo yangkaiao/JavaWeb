@@ -48,9 +48,9 @@
               </td>
               <td th:text="${cartItem.getBook().getName()}">活着</td>
               <td>
-                <span class="count">-</span>
-                <input class="count-num" type="text" th:value="${cartItem.bookCount}" value="1"/>
-                <span class="count" th:onclick="||">+</span>
+                <button class="count" th:onclick="|update(${cartItem.bookCount-1}, ${cartItem.cartId})|" th:disabled="${cartItem.bookCount==1}">-</button>
+                <input class="count-num" type="number" th:value="${cartItem.bookCount}" value="1" th:name="${cartItem.cartId}"/>
+                <button class="count" th:onclick="|update(${cartItem.bookCount+1} , ${cartItem.cartId})|">+</button>
               </td>
               <td th:text="${cartItem.getBook().getPrice()}"></td>
               <td th:text="${cartItem.getBook().getPrice() * cartItem.bookCount}"></td>
@@ -105,4 +105,5 @@
       </div>
     </div>
   </body>
+  <script th:src="@{static/script/cart.js}"></script>
 </html>

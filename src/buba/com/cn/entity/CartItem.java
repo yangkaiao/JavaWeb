@@ -20,6 +20,11 @@ public class CartItem {
     public CartItem() {
     }
 
+    public CartItem(Integer cartId, Integer bookCount) {
+        this.cartId = cartId;
+        this.bookCount = bookCount;
+    }
+
     public CartItem(Book book, Integer bookCount, User user) {
         this.book = book;
         this.bookCount = bookCount;
