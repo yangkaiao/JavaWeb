@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>图书管理系统</title>
+    <link rel="stylesheet" th:href="@{static/css/minireset.css}" />
+    <link rel="stylesheet" th:href="@{static/css/common.css}" />
+    <link rel="stylesheet" th:href="@{static/css/cart.css}" />
+    <link rel="stylesheet" th:href="@{static/css/bookManger.css}" />
+  </head>
+  <body>
+    <div class="header">
+      <div class="w">
+        <div class="header-left">
+          <a th:href="@{index}">
+            <img class="logo_img" alt="" th:src="@{static/img/logo.gif}" />
+          </a>
+          <h1>图书管理系统</h1>
+        </div>
+        <div class="header-right">
+          <a href="#" class="order">图书管理</a>
+          <a th:href="@{Order(method='order_manager')}" class="destory">订单管理</a>
+          <a th:href="@{index}" class="gohome">返回商城</a>
+        </div>
+      </div>
+    </div>
+    <div class="list">
+      <div class="w">
+        <div class="add">
+          <a th:href="@{Admin(method='book_add')}">添加图书</a>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>图片</th>
+              <th>商品名称</th>
+              <th>价格</th>
+              <th>作者</th>
+              <th>销量</th>
+              <th>库存</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+          <!--第一页为空他才显示 对不起，库存为空-->
+            <tr th:if="${#lists.isEmpty(bookList)} ">
+              <td colspan="7">对不起，库存已空</td>
+            </tr>
+            <tr th:each="item:${bookList}" th:unless="${#lists.isEmpty(bookList)}">
+              <td>
+                <img th:src="${item.imgPath}" alt="" />
+              </td>
+              <td th:text="${item.name}"></td>
+              <td th:text="${item.price}"></td>
+              <td th:text="${item.author}"></td>
+              <td th:text="${item.sales}"></td>
+              <td th:text="${item.stock}"></td>
+              <td>
+                <a th:href="@{Admin(method='book_update',bookId=${item.bookId})}">修改</a>
+                <a th:href="@{Admin(method='book_delete',bookId = ${item.bookId},pageNo = ${session.pageNo})}" class="del">删除</a>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+        <div class="footer">
+          <div class="footer-right">
+            <input class="btn" th:onclick="|page(1)|" value="首页" th:disabled="${session.pageNo==1}">
+            <input class="btn" value="上一页" th:onclick="|page(${session.pageNo-1})|"  th:disabled="${session.pageNo==1}" >
+            <ul>
+              <li
+                      th:each="item:${pageList}"
+                      th:text="${item}"
+                      th:class="${item == session.pageNo ? 'active' : ''} "
+                      th:onclick="|page(${item})|"
+                      style="display:none"
+              >
+
+              </li>
+            </ul>
+            <input class="btn" value="下一页" th:onclick="|page(${session.pageNo+1})|" th:disabled="${session.pageNo==session.pageCount}" >
+            <input class="btn" value="末页" th:onclick="|page(${session.pageCount})|" th:disabled="${session.pageNo==session.pageCount}">
+            <span>共 <e th:text="${session.pageCount}" class="e"></e> 页</span>
+            <span><e th:text="${session.count}"></e>条记录</span>
+            <span>到第</span>
+            <input type="text" id="number"/>
+            <span>页</span>
+            <input type="hidden" id="pagevalue" th:value="${session.pageCount}">
+            <button id="btn">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom">
+      <div class="w">
+        <div class="top">
+          <ul>
+            <li>
+              <a href="">
+                <img th:src="@{static/img/bottom1.png}" alt="" />
+                <span>售后服务</span>
+              </a>
+            </li>
+            <li>
+              <a href="">
+                <img th:src="@{static/img/bottom.png}" alt="" />
+                <span>物流服务</span>
+              </a>
+            </li>
+            <li>
+              <a href="">
+                <img th:src="@{static/img/bottom2.png}" alt="" />
+                <span>联系电话</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="content">
+          
+        </div>
+      </div>
+      <div class="down">
+        Deer.Copyright ©2022
+      </div>
+    </div>
+
+    <script th:src="@{static/script/book_manager.js}"></script>
+
+  </body>
+</html>

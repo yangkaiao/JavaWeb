@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>书城首页</title>
+    <link rel="stylesheet" th:href="@{static/css/minireset.css}" />
+    <link rel="stylesheet" th:href="@{static/css/common.css}" />
+    <link rel="stylesheet" th:href="@{static/css/iconfont.css}" />
+    <link rel="stylesheet" th:href="@{static/css/index.css}" />
+    <link rel="stylesheet" th:href="@{static/css/swiper.min.css}" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="topbar">
+        <div class="w">
+          <div class="topbar-left">
+            <i>送至:</i>
+            <i>北京</i>
+            <i class="iconfont icon-ai-arrow-down"></i>
+          </div>
+          <!--登录前的效果 一开始session.username==null。登录后username才有值，没有值显示这个页面，unless取反有值显示下面界面-->
+          <div class="topbar-right" th:if="${session.username==null}">
+            <a th:href="@{User(method='login')}" class="login">登录</a>
+            <a th:href="@{User(method='regist')}" class="register">注册</a>
+            <a th:href="@{Cart(method='cart')}" class="cart iconfont icon-gouwuche">
+              购物车
+              <div class="cart-num">0</div>
+            </a>
+            <a th:href="@{Admin(method='book_manager')}" class="admin">后台管理</a>
+          </div>
+          <!--登录后风格 登录后username就有值，unless取反有值显示下面界面-->
+          <div class="topbar-right" th:unless="${session.username==null}">
+            <span>欢迎你<b th:text="${session.username}">张总</b></span>
+            <a th:href="@{User(method='logout')}" class="register">注销</a>
+            <a th:href="@{Cart(method='cart')}" class="cart iconfont icon-gouwuche">
+              购物车
+              <div class="cart-num" th:text="${session.currUser.getCart().getTotalCount()}"></div>
+            </a>
+            <a th:href="@{Admin(method='book_manager')}" class="admin">后台管理</a>
+          </div>
+        </div>
+      </div>
+      <div class="header w">
+        <a href="#" class="header-logo"></a>
+        <div class="header-nav">
+          <ul>
+            <li><a href="#">java</a></li>
+            <li><a href="#">前端</a></li>
+            <li><a href="#">小说</a></li>
+            <li><a href="#">文学</a></li>
+            <li><a href="#">青春文学</a></li>
+            <li><a href="#">艺术</a></li>
+            <li><a href="#">管理</a></li>
+          </ul>
+        </div>
+        <div class="header-search">
+          <input type="text" placeholder="十万个为什么" />
+          <button class="iconfont icon-search"></button>
+        </div>
+      </div>
+      <div class="banner w clearfix">
+        <div class="banner-left">
+          <ul>
+            <!--      先循环集合      -->
+            <li class="lateral_li" th:each="item : ${session.bookTypeList}">
+              <a href="" class="lateral_a1">
+                <!-- 一级内容 -->
+                <span th:text="${item[0]}">文学 鉴赏</span>
+                <i class="iconfont icon-jiantou"></i></a>
+              <div class="lateral_div" style="background: #39987c;">
+                <!-- 循环二级集合 -->
+                <dl class="lateral_dl" th:each="item2,item2Stat: ${item[1]}">
+                  <!-- 循环的二级集合 内容 -->
+                  <dt class="lateral_dt" th:text="${item2}" style="font-weight: bolder"></dt>
+                  <!-- 循环三级集合的内容 -->
+                  <a th:href="@{lateral(method='lateral',item3=${item3})}" class="lateral_a2" th:each="item3 : ${item[2][item2Stat.index]}">
+                    <dd class="lateral_dd" th:text="${item3}" style="color: #fff;"></dd>
+                  </a>
+                </dl>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="banner-right">
+          <div class="swiper-container">
+            <ul class="swiper-wrapper">
+              <li class="swiper-slide">
+                <img src="./static/uploads/banner4.jpg" alt="">
+                <!-- <div class="banner-img"></div> -->
+              </li>
+              <li class="swiper-slide">
+                <img src="./static/uploads/banner5.jpg" alt="">
+                <!-- <div class="banner-img"></div> -->
+              </li>
+              <li class="swiper-slide">
+                <img src="./static/uploads/banner6.jpg" alt="">
+                <!-- <div class="banner-img"></div> -->
+              </li>
+            </ul>
+            <div class="swiper-button-prev"></div>
+
+            <div class="swiper-button-next"></div>
+
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+          </div>
+        </div>
+      </div>
+      <div class="books-list ">
+        <div class="w">
+          <div class="list">
+            <div class="list-header">
+              <div class="title">图书列表</div>
+              <div class="price-search">
+                <span>价格:</span>
+                <input type="text" id="leftipt" th:value="${session.minprice}">
+                <span>-元</span>
+                <input type="text" id="rightipt" th:value="${session.maxprice}">
+                <span>元</span>
+                <button id="selbtn">查询</button>
+              </div>
+            </div>
+            <div th:if="${#lists.isEmpty(bookList)} ">
+              对不起，库存已空
+            </div>
+            <div class="list-content">
+              <div class="list-item" th:each="item:${bookList}" th:unless="${#lists.isEmpty(bookList)} ">
+                <img th:src="${item.imgPath}" alt="">
+                <p>书名: <e th:text="${item.name}"></e> </p>
+                <p>作者:<e th:text="${item.author}"></e></p>
+                <p>价格:￥<e th:text="${item.price}"></e></p>
+                <p>销量:<e th:text="${item.sales}"></e></p>
+                <p>库存:<e th:text="${item.stock}"></e></p>
+                <button class="addcart" th:onclick="|addCart(${item.bookId})|">加入购物车</button>
+              </div>
+
+
+            </div>
+            <div class="list-footer">
+              <input class="btn" th:onclick="|page(1)|" value="首页" th:disabled="${session.pageNo==1}">
+              <input class="btn" value="上一页" th:onclick="|page(${session.pageNo-1})|"  th:disabled="${session.pageNo==1}" >
+              <ul>
+                <!--th:class="${item == session.pageNo ? 'active' : ''}：这段代码意思：
+                          session.pageNo是随时变动的页码，item是所有页码如1，2，3 如果现在session.pageNo等于2了 2数字上就添加样式了-->
+                <li
+                    th:each="item:${pageList}"
+                    th:text="${item}"
+                    th:class="${item == session.pageNo ? 'active' : ''} "
+                    th:onclick="|page(${item})|"
+                    style="display:none"
+                >
+
+                </li>
+
+              </ul>
+              <input class="btn" value="下一页" th:onclick="|page(${session.pageNo+1})|" th:disabled="${session.pageNo==session.pageCount || session.pageCount==0}" >
+              <input class="btn" value="末页" th:onclick="|page(${session.pageCount})|" th:disabled="${session.pageNo==session.pageCount || session.pageCount==0}">
+              <span>共 <e th:text="${session.pageCount}" class="e"></e> 页</span>
+              <span><e th:text="${session.count}"></e>条记录</span>
+              <span>到第</span>
+              <input type="text" id="number"/>
+              <span>页</span>
+              <input type="hidden" id="pagevalue" th:value="${session.pageCount}">
+              <button id="btn">确定</button>
+            </div>
+          </div>
+        </div>
+       
+      </div>
+      <div class="cate w">
+        <div class="list">
+          <a href="" class="list-item">
+            <i class="iconfont icon-java"></i>
+            <span>java</span>
+          </a>
+          <a href="" class="list-item"
+            ><i class="iconfont icon-h5"></i>h5</a
+          >
+          <a href="" class="list-item">
+            <i class="iconfont icon-python"></i>python
+          </a>
+          <a href="" class="list-item"
+            ><i class="iconfont icon-tianchongxing-"></i>pm</a
+          >
+          <a href="" class="list-item"
+            ><i class="iconfont icon-php_elephant"></i>php</a
+          >
+          <a href="" class="list-item"
+            ><i class="iconfont icon-go"></i>go</a
+          >
+        </div>
+        <a href="" class="img">
+          <img src="./static/uploads/cate4.jpg" alt="" />
+        </a>
+        <a href="" class="img">
+          <img src="./static/uploads/cate5.jpg" alt="" />
+        </a>
+        <a href="" class="img">
+          <img src="./static/uploads/cate6.jpg" alt="" />
+        </a>
+      </div>
+      <div class="books">
+        <div class="w">
+          <div class="seckill">
+            <div class="seckill-header">
+              <div class="title">
+                图书秒杀
+              </div>
+              <!-- <i class="iconfont icon-huanyipi"></i> -->
+            </div>
+            <div class="seckill-content">
+             
+                  <a href="" class="tip"> 
+                     <h5>距离结束还有</h5>
+                     <i class="iconfont icon-shandian"></i>
+                     <div class="downcount">
+                      <span class="time">00</span>
+                      <span class="token">:</span>
+                      <span class="time">00</span>
+                      <span class="token">:</span>
+                      <span class="time">00</span>
+                     </div>
+                  </a>
+              
+              
+                  <a href="" class="books-sec">
+                    <img src="./static/uploads/congwanqingdaominguo.jpg" alt="">
+                    <p>从晚晴到民国</p>
+                    <div>
+                      <span class="cur-price">￥28.9</span>
+                      <span class="pre-price">￥36.5</span>
+                    </div>
+                    <button>立即购买</button>
+                  </a>
+                  <a href="" class="books-sec">
+                    <img src="./static/uploads/cyuyanrumenjingdian.jpg" alt="">
+                    <p>c语言入门经典</p>
+                    <div>
+                      <span class="cur-price">￥55.9</span>
+                      <span class="pre-price">￥68.5</span>
+                    </div>
+                    <button>立即购买</button>
+                  </a>
+                  <a href="" class="books-sec">
+                    <img src="./static/uploads/fusang.jpg" alt="">
+                    <p>扶桑</p>
+                    <div>
+                      <span class="cur-price">￥30.9</span>
+                      <span class="pre-price">￥47.5</span>
+                    </div>
+                    <button>立即购买</button>
+                  </a>
+                  <a href="" class="books-sec">
+                    <img src="./static/uploads/geihaizideshi.jpg" alt="">
+                    <p>给孩子的诗</p>
+                    <div>
+                      <span class="cur-price">￥18.9</span>
+                      <span class="pre-price">￥25.5</span>
+                    </div>
+                    <button>立即购买</button>
+                  </a>
+             
+           
+                 
+             
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="w">
+          <div class="top">
+            <ul>
+              <li>
+                <a href="">
+                  <img src="./static/img/bottom1.png" alt="">
+                  <span>售后服务</span>
+                </a>
+              </li>
+              <li>
+                <a href="">
+                  <img src="./static/img/bottom.png" alt="">
+                  <span>物流服务</span>
+                </a>
+              </li>
+              <li>
+                <a href="">
+                  <img src="./static/img/bottom2.png" alt="">
+                  <span>联系电话</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="content">
+           
+          </div>
+        </div>
+        <div class="down">
+          Deer.Copyright ©2022
+        </div>
+      </div>
+     
+
+    </div>
+    <script th:src="@{static/script/swiper.min.js}"></script>
+    <script th:src="@{static/script/index.js}"></script>
+
+  </body>
+</html>

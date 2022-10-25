@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+    <!-- 在上下文参数中配置视图前缀和视图后缀 -->
+    <context-param>
+        <!--view-prefix：视图前缀-->
+        <param-name>view-prefix</param-name>
+        <param-value>/WEB-INF/view/</param-value>
+    </context-param>
+    <context-param>
+        <!--view-suffix：视图后缀-->
+        <param-name>view-suffix</param-name>
+        <param-value>.html</param-value>
+    </context-param>
+
+    <servlet>
+        <servlet-name>IndexServlet</servlet-name>
+        <servlet-class>buba.com.cn.controller.IndexServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>IndexServlet</servlet-name>
+        <url-pattern>/index</url-pattern>
+    </servlet-mapping>
+
+    <!-- 用户界面，登录和注册的-->
+    <servlet>
+        <servlet-name>UserServlet</servlet-name>
+        <servlet-class>buba.com.cn.controller.UserServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>UserServlet</servlet-name>
+        <url-pattern>/User</url-pattern>
+    </servlet-mapping>
+
+
+    <!--购物车界面-->
+    <servlet>
+        <servlet-name>CartServlet</servlet-name>
+        <servlet-class>buba.com.cn.controller.CartServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>CartServlet</servlet-name>
+        <url-pattern>/Cart</url-pattern>
+    </servlet-mapping>
+
+    <!--后台管理界面-->
+    <servlet>
+        <servlet-name>AdminServlet</servlet-name>
+        <servlet-class>buba.com.cn.controller.BookAdminServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>AdminServlet</servlet-name>
+        <url-pattern>/Admin</url-pattern>
+    </servlet-mapping>
+
+    <!--订单界面-->
+    <servlet>
+        <servlet-name>OrderServlet</servlet-name>
+        <servlet-class>buba.com.cn.controller.OrderServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>OrderServlet</servlet-name>
+        <url-pattern>/Order</url-pattern>
+    </servlet-mapping>
+</web-app>

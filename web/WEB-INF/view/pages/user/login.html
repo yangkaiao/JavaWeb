@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>网上书店登录页面</title>
+    <link type="text/css" rel="stylesheet" th:href="@{static/css/style.css}" />
+<!--    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>-->
+    <script th:src="@{static/script/axios.js}"></script>
+  </head>
+  <body>
+
+
+    <div id="login_header">
+      <a th:href="@{index}">
+        <img class="logo_img" alt="" th:src="@{static/img/logo.gif}" />
+      </a>
+    </div>
+
+    <div class="login_banner">
+      <div id="l_content">
+        <span class="login_word">欢迎登录</span>
+      </div>
+
+      <div id="content">
+        <div class="login_form">
+          <div class="login_box">
+            <div class="tit">
+              <h1>会员登录</h1>
+            </div>
+            <div class="msg_cont">
+              <b></b>
+              <span class="errorMsg">请输入用户名和密码</span>
+            </div>
+            <div class="form">
+                <!--这里就不用form表单跳转了，下面js里面用axios写的-->
+<!--              <form th:action="@{JumpHtml(method='login_success')}" method="post">-->
+                <label>用户名称：</label>
+                <input
+                  class="itxt"
+                  type="text"
+                  placeholder="请输入用户名"
+                  autocomplete="off"
+                  tabindex="1"
+                  name="username"
+                  id="username"
+                  th:value="${username}"
+                />
+                <br />
+                <br />
+                <label>用户密码：</label>
+                <input
+                  class="itxt"
+                  type="password"
+                  placeholder="请输入密码"
+                  autocomplete="off"
+                  tabindex="1"
+                  name="password"
+                  id="password"
+                />
+                <br />
+                <br />
+                <input type="submit" value="登录" id="sub_btn" >
+                <input type="hidden" th:value="${Idcount}" id="hiddden" >
+<!--              </form>-->
+              <div class="tit">
+                <a th:href="@{User(method='regist')}">立即注册</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="bottom">
+      <span>
+        Deer.Copyright &copy;2022
+      </span>
+    </div>
+  </body>
+</html>
+
+  <script>
+  var hiddden = document.getElementById("hiddden");
+  var btn = document.getElementById("sub_btn");
+  var ipt = document.getElementsByClassName("itxt");
+  var errorMsg = document.getElementsByClassName("errorMsg")[0];
+
+  //js中 window.location.href使用post请求
+  function selectThis(name,password) {
+    //window.location.href = contextPath+'/getAgentPosImportStatementListWithPaging.jhtml?agentNo='+agentNo;
+    document.write("<form action=User?method=login_success method=post name=form1 style='display:none'>");
+    document.write("<input type=hidden name=username value='"+name+"'/>");
+    document.write("<input type=hidden name=password value='"+password+"'/>");
+    document.write("</form>");
+    document.form1.submit();
+  }
+
+   btn.onclick= function (e){
+     var name = ipt[0].value;
+     var password = ipt[1].value;
+     var cont = false;
+     for (let i = 0; i < ipt.length; i++) {
+       if(ipt[i].value==''){
+         cont=true;
+       }
+     }
+     if(cont){
+       // alert("内容不能为空，请输入内容");
+       errorMsg.innerHTML="内容不能为空，请输入内容";
+       errorMsg.style.color = "red";
+       e.preventDefault();
+     }
+
+     var url = "User?method=login_success&username="+name +"&password="+password;
+    axios.post(url).then(res=>{
+      if(res.data == 0){
+          if(name!='' && password != ''){
+              console.log("登录失败");
+              errorMsg.innerHTML="账号密码有误，请重新输入";
+              errorMsg.style.color = "red";
+          }
+
+      }else {
+          //这个也可以成功，但是网站上能看见账号密码，因为href是get请求，所有调用selectThis(name,password);方法改成post请求
+          // window.location.href="JumpHtml?method=login_success&username="+name +"&password="+password;
+        selectThis(name,password);//post请求
+        console.log("登录成功");
+      }
+      // console.log(res.data);
+    })
+
+   }
+
+
+  </script>

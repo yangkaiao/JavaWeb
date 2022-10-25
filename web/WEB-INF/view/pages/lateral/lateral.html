@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>侧行栏图书信息</title>
+</head>
+<link rel="stylesheet" th:href="@{static/css/index.css}">
+<body>
+<div class="books-list">
+    <div class="w">
+        <div class="list">
+            <div class="list-header">
+                <div class="title" th:text="${session.item3}" style="font-weight: bolder">图书列表</div>
+                <div class="price-search">
+                </div>
+            </div>
+            <div class="list-content">
+                <!--       数据库中图书信息       -->
+                <div th:each="item : ${session.bookTypeList}" class="list-item">
+                    <img th:src="${item.imgPath}" alt="">
+                    <p style="margin: 0 0 0 0;" th:text="${item.name}">书名:活着</p>
+                    <p style="margin: 0 0 0 0;" th:text="${item.author}">作者:余华</p>
+                    <p style="margin: 0 0 0 0;" th:text="${item.price}">价格:￥66.6</p>
+                    <p style="margin: 0 0 0 0;" th:text="${item.sales}">销量:230</p>
+                    <p style="margin: 0 0 0 0;" th:text="${item.stock}">库存:1000</p>
+                    <button>加入购物车</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

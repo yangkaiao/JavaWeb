@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>会员注册页面</title>
+    <link type="text/css" rel="stylesheet" th:href="@{static/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{static/css/register.css}" />
+    <script th:src="@{static/script/axios.js}"></script>
+
+    <style type="text/css">
+      .login_form {
+        height: 420px;
+        margin-top: 25px;
+      }
+      #yzmdiv{
+        display:inline-block;
+        width:110px;
+        height:40px;
+        line-height: 40px;
+        cursor:pointer;
+        text-align: center;
+        background-color: lightgray;
+        vertical-align:middle;
+      }
+      #text{
+        width:150px;
+        font-size:9px;
+        margin-left:234px;
+        color:gray;
+        cursor:pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="login_header">
+      <a th:href="@{index}">
+        <img class="logo_img" alt="" th:src="@{static/img/logo.gif}" />
+      </a>
+    </div>
+
+    <div class="login_banner">
+      <div class="register_form">
+        <h1>注册会员</h1>
+        <form th:action="@{User(method='regist_success')}" method="post">
+          <div class="form-item">
+            <div>
+              <label>用户名称:</label>
+              <input type="text" placeholder="请输入用户名" name="username" class="ipt">
+            </div>
+            <span class="errMess">用户名应为6~16位数组和字母组成</span>
+          </div>
+          <div class="form-item">
+            <div>
+              <label>用户密码:</label>
+              <input type="password" placeholder="请输入密码" name="password" class="ipt"/>
+            </div>
+            <span class="errMess">密码的长度至少为8位</span>
+          </div>
+          <div class="form-item">
+            <div>
+              <label>确认密码:</label>
+              <input type="password" placeholder="请输入确认密码" name="passwordcopy" class="ipt"/>
+            </div>
+            <span class="errMess">密码两次输入不一致</span>
+          </div>
+          <div class="form-item">
+            <div>
+              <label>用户邮箱:</label>
+              <input type="text" placeholder="请输入邮箱" name="email" class="ipt"/>
+            </div>
+            <span class="errMess">请输入正确的邮箱格式</span>
+          </div>
+          <div class="form-item">
+            <div>
+              <label>验证码:</label>
+              <div class="verify">
+                <input type="text" placeholder="" name="yzm" class="ipt">
+                <div id="yzmdiv"></div>
+              </div>
+            </div>
+            <span id="text">看不清，点击换一张图片</span>
+            <span class="errMess">请输入正确的验证码</span>
+          </div>
+          <button class="btn">注册</button>
+        </form>
+      </div>
+    </div>
+    <div id="bottom">
+      <span>
+        Deer.Copyright &copy;2022
+      </span>
+    </div>
+  </body>
+</html>
+<script>
+  var btn = document.getElementsByClassName("btn")[0];
+  var ipt = document.getElementsByClassName("ipt");
+  var errMess = document.getElementsByClassName("errMess");
+  var text = document.getElementById("text")
+  var str;
+
+  var reg1 = /^[a-zA-Z0-9]{6,16}$/;
+  var reg2 = /^[a-zA-Z0-9]{8,}$/;
+  var reg3 = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
+  var regarr = [reg1,reg2,/^$/,reg3,/^$/];
+
+  //校验input框输入的信息
+ for (var i = 0; i < ipt.length; i++){
+   (function(j){
+     ipt[j].onblur = function(){
+        console.log("j="+j);
+       var value = ipt[j].value;
+
+       //判断每一个input框 校验 正则表达式 是否正确
+       if(regarr[j].test(value)==false){
+         errMess[j].style.visibility="visible";
+       }else {
+         errMess[j].style.visibility="hidden";
+       }
+
+       //判断用户名框用户是否存在
+       if(j==0){
+         var url = "User?method=regist_username&username="+value;
+         axios.post(url).then(res=>{
+            console.log(res.data);
+            if(res.data == 1){
+              errMess[j].innerHTML="用户已存在";
+              errMess[j].style.visibility="visible";
+            }else {
+              errMess[j].innerHTML="用户名应为6~16位数组和字母组成";
+            }
+         })
+       }
+
+       //j==2时 确定密码 那个input框，判断用户密码和确定密码的value值是否一致
+       if(j==2){
+         console.log(ipt[j].value);
+         console.log(ipt[j-1].value);
+         if(ipt[j].value != ipt[j-1].value || ipt[j].value=='' || regarr[j-1].test(value)==false){
+           errMess[j].style.visibility="visible";
+           console.log("进来了")
+         }else {
+           errMess[j].style.visibility="hidden";
+         }
+       }
+
+       //j==4时 验证 验证码是否正确
+       if(j==4){
+         if(ipt[j].value.toLowerCase() == str.toLowerCase()){   //转化为大小写都能进行比较，不限制大小写
+           errMess[j].style.visibility="hidden";
+         }else{
+           errMess[j].style.visibility="visible";
+           run();
+         }
+       }
+
+     }
+   })(i)
+ }
+
+
+  //点击登录 判断input框是否为空
+  btn.onclick=function(e){
+    var cont = false;
+    for (let i = 0; i < ipt.length; i++) {
+
+      //只要有一个显示文本框下面那行红色字时，就说明输入错误，就禁止跳转
+      if(errMess[i].style.visibility=="visible"){
+        e.preventDefault();
+      }
+
+      //如果为空时禁止跳转
+      if(ipt[i].value == ''){
+        cont=true;
+        errMess[i].style.visibility="visible";
+        e.preventDefault();
+      }
+
+      // //如果正则校验为false时禁止跳转
+      // if(regarr[i].test(ipt[i].value)==false){
+      //  //因为  var regarr = [reg1,reg2,/^$/,reg3,/^$/]; 中2和4都是 /^$/ 尽管输入正确了他也会提示显示那一行字，
+      //   // 所以i==2和i==4的时候不让他们进判断
+      //   if(i!=2 && i!=4){
+      //     errMess[i].style.visibility="visible";
+      //     e.preventDefault();
+      //   }
+      // }
+
+
+    }
+    if(cont){
+      alert("内容不能为空，请输入信息")
+    }
+  }
+
+
+ //以下操作的随机生成验证码操作
+  var div = document.querySelector('#yzmdiv');
+  // 验证码字符
+  var chars = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890";
+
+  // 生成m-n的数字
+  function getRandom(m,n){
+    return Math.floor(Math.random()*(n-m+1)+m);
+  }
+  // 验证码禁用文本选中
+  div.addEventListener("selectstart",function(e){
+    e.preventDefault();
+  })
+  // 生成随机验证码
+  function run(){
+    str = '';
+    // 若验证码存在，则清除
+    while(div.hasChildNodes()){
+      div.removeChild(div.firstChild);
+    }
+    // 生成6位数的验证码
+    for(var i=0;i<6;i++){
+      var span = document.createElement('span');
+      span.innerHTML = chars[getRandom(0,chars.length-1)]; //生成随机数，并取得对应值
+      span.style.display = "inline-block";
+      span.style.fontSize = getRandom(16,24)+"px";  //随机字体大小
+      span.style.color = 'rgb('+getRandom(0,200)+','+getRandom(0,200)+','+getRandom(0,200)+')';  //随机字体颜色
+      span.style.transform = 'translate('+getRandom(-5,5)+'px,'+getRandom(-5,5)+'px) rotate('+getRandom(-20,20)+'deg)'; //随机平移旋转
+      str += span.innerHTML; //将str拼接，和input值对比
+      div.appendChild(span);
+    }
+  }
+  run(); //进入页面生成验证码
+  text.addEventListener("click",run);//点击看不起换一张，会再次生成验证码
+
+
+
+
+
+</script>
