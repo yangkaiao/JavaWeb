@@ -3,7 +3,7 @@
 function update(bookCount,cartId){
     window.location.href="/JavaWeb/Cart?method=updateBookCount&bookCount="+bookCount +"&cartId="+cartId
 }
-
+//能够输入 修改图书数量
 let iptcount = document.getElementsByClassName("count-num");
     for (let i = 0; i < iptcount.length;i++){
         iptcount[i].index = i;
@@ -17,3 +17,15 @@ let iptcount = document.getElementsByClassName("count-num");
             }
         }
     }
+
+
+    //结账跳转 如果购物车没有图书不能去结账
+    let count = document.getElementById("count");
+    let check = document.getElementById("check");
+   check.onclick=function(e){
+        if(Number(count.innerText)==0){
+            alert("请加入你要购买的商品");
+            e.preventDefault();
+        }
+    }
+

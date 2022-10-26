@@ -25,7 +25,7 @@
             <a th:href="@{User(method='regist')}" class="register">注册</a>
             <a th:href="@{Cart(method='cart')}" class="cart iconfont icon-gouwuche">
               购物车
-              <div class="cart-num">0</div>
+<!--              <div class="cart-num">0</div>-->
             </a>
             <a th:href="@{Admin(method='book_manager')}" class="admin">后台管理</a>
           </div>
@@ -35,7 +35,7 @@
             <a th:href="@{User(method='logout')}" class="register">注销</a>
             <a th:href="@{Cart(method='cart')}" class="cart iconfont icon-gouwuche">
               购物车
-              <div class="cart-num" th:text="${session.currUser.getCart().getTotalCount()}"></div>
+              <div class="cart-num" th:text="${session.currUser.getCart().getTotalCount()}" th:if="${session.currUser.getCart().getTotalCount() != 0}"></div>
             </a>
             <a th:href="@{Admin(method='book_manager')}" class="admin">后台管理</a>
           </div>

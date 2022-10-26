@@ -15,8 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /*
 * 购物车界面
@@ -32,11 +35,6 @@ public class CartServlet extends ViewBaseServlet {
             processTemplate("pages/cart/cart",req, resp);
         }
 
-        //购物车结账界面
-        if(req.getParameter("method").equals("checkout")){
-            //请求转发跳转到/WEB-INF/view/pages/user/login.html
-            processTemplate("pages/cart/checkout",req, resp);
-        }
 
         //主页加入购物车
         if(req.getParameter("method").equals("addCart")){
@@ -59,14 +57,15 @@ public class CartServlet extends ViewBaseServlet {
         }
 
 
-        //以下代码：主页每点一次加入购物车 导航栏的购物车的数量就会实时更新
+        //以下代码：主页每点一次加入购物车 导航栏的购物车的数量就会实时更新  加入完购物车操作完再次更新购物车数据
         User user = (User)req.getSession().getAttribute("currUser");//登录成功后的用户
         Cart cart = cartItemService.getCart(user);
         user.setCart(cart);
         System.out.println(cart);
-        req.getSession().setAttribute("currUser",user);
+        req.getSession().setAttribute("currUser",user);//重新设置一下
 
     }
+
 
 
 
@@ -76,9 +75,9 @@ public class CartServlet extends ViewBaseServlet {
         HttpSession session = req.getSession();
         Book cartBook = bookAdminService.FindBookId(Integer.valueOf(bookId));
         User user = (User)session.getAttribute("currUser");//登录成功后的用户
-        CartItem cartItem = new CartItem(cartBook,1,user);
+        CartItem cartItem = new CartItem(cartBook,1,user); //当前用户的购物车项信息
 
-        //将指定的图书添加到当前用户的购物车中
+        //将指定的图书添加到当前用户的购物车中  cartItem：当前用户的购物车项信息  user.getCart()：当前用户的购物车
         cartItemService.addOrUpdateCartItem(cartItem,user.getCart());
         resp.sendRedirect("/JavaWeb/index");//跳到主页
     }
@@ -93,10 +92,10 @@ public class CartServlet extends ViewBaseServlet {
     }
 
     //清空购物车
-    private void clearCart(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void clearCart(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
         User user = (User)session.getAttribute("currUser");//登录成功后的用户
-        cartItemService.clearCartItem(Integer.valueOf(user.getUserId()));
+        cartItemService.clearCartItem(user.getUserId());
         resp.sendRedirect("/JavaWeb/Cart?method=cart");
     }
 
@@ -108,5 +107,9 @@ public class CartServlet extends ViewBaseServlet {
         cartItemService.updateCartItem(cartItem);
         resp.sendRedirect("/JavaWeb/Cart?method=cart");
     }
+
+
+
+
 
 }

@@ -31,6 +31,7 @@
 <!--				<a href="../../index.html">返回</a>-->
 <!--			</div>-->
 <!--	</div>-->
+
 		<div class="header">
 			<div class="w">
 				<div class="header-left">
@@ -40,7 +41,7 @@
 					<span>我的购物车</span>
 				</div>
 				<div class="header-right">
-					<h3>欢迎<span>会员</span>光临Deer书城</h3>
+					<h3>欢迎<span th:text="${session.username}">会员</span>光临Deer书城</h3>
 					<div class="Order"><a th:href="@{Order(method='order')}">我的订单</a></div>
 					<div class="destory"><a th:href="@{index}">注销</a></div>
 					<div class="gohome">
@@ -51,7 +52,7 @@
 		</div>
 	
 	<div id="main">
-		<h1>你的订单已结算，订单号为:<span class="oid">546845626455846</span></h1>
+		<h1>你的订单已结算，订单号为:<span class="oid" th:text="${session.orderIdByTime}">546845626455846</span></h1>
 	</div>
 
 	<div id="bottom">

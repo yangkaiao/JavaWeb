@@ -10,7 +10,7 @@ import java.sql.Date;
  * @Version: v1.0
  */
 public class User {
-    private  String userId;//用户id
+    private Integer userId;//用户id
     private String userName;//用户名
     private String userPassword;//用户密码
     private String email;//用户邮箱
@@ -56,11 +56,11 @@ public class User {
         this.email = email;
     }
 
-    public String getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 

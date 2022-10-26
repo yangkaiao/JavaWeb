@@ -59,18 +59,18 @@ public class CartItemServiceImpl implements CartItemService {
         }
     }
 
-    //加载特定用户的购物车信息
+    //加载特定用户的购物车信息  更新数据的
     @Override
     public Cart getCart(User user) {
         //当前用户的信息
         List<CartItem> cartItemList = cartItemDao.getCartItemList(user);
         HashMap<Integer,CartItem> cartItemMap = new HashMap<>();
         for(CartItem cartItem : cartItemList){
-            cartItemMap.put(cartItem.getBook().getBookId(),cartItem);
+            cartItemMap.put(cartItem.getBook().getBookId(),cartItem);//这是一个添加购物车的效果 把图书信息添加到map集合中
         }
         System.out.println(cartItemMap);
         Cart cart = new Cart();
-        cart.setCartItemMap(cartItemMap);
+        cart.setCartItemMap(cartItemMap);//最后更新一下购物车的信息
         return cart;
     }
 

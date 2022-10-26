@@ -57,13 +57,14 @@ public class CartItemDaoImpl implements CartItemDao {
         return update;
     }
 
-    //获取特定用户的所有购物车项
+    //获取特定用户的所有购物车项  通过每个用户的id查找cartItem实体类中信息
     @Override
     public List<CartItem> getCartItemList(User user) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(JDBCUtils.getDateSource());
         String sql = "select * from t_cart_item where user_id = ?";
         List<CartItem> query = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(CartItem.class), user.getUserId());
         for (CartItem cartItem : query) {
+            //通过加入购物车的那本书的id查整本书的信息
             Integer bookId = cartItem.getBookId();
             Book book = bookAdminDao.FindBookId(bookId);
             cartItem.setBook(book);

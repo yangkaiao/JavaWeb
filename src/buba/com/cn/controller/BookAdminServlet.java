@@ -157,7 +157,7 @@ public class BookAdminServlet extends ViewBaseServlet {
 
             //普通数据
             book.setName(items.get(1).getString("UTF-8"));
-            book.setPrice(Double.valueOf(items.get(2).getString("UTF-8")));
+            book.setPrice(new BigDecimal(items.get(2).getString("UTF-8")));
             book.setAuthor(items.get(3).getString("UTF-8"));
             book.setSales(Integer.valueOf(items.get(4).getString("UTF-8")));
             book.setStock(Integer.valueOf(items.get(5).getString("UTF-8")));
@@ -212,7 +212,7 @@ public class BookAdminServlet extends ViewBaseServlet {
         String sales = req.getParameter("sales");
         String stock = req.getParameter("stock");
         Object pageNo = req.getSession().getAttribute("pageNo");
-        Book book = new Book(Integer.valueOf(bookId), name, Double.parseDouble(price), author, Integer.valueOf(sales), Integer.valueOf(stock));
+        Book book = new Book(Integer.valueOf(bookId), name, new BigDecimal(price), author, Integer.valueOf(sales), Integer.valueOf(stock));
         int i = bookAdminService.upBook(book);
         System.out.println(i);
         System.out.println(book);

@@ -11,11 +11,12 @@ import java.sql.Date;
  * @Version: v1.0
  */
 public class Order {
-    private Integer orderId;//订单编号
+    private Integer orderId;//订单id
+    private Long orderNumber;//订单编号
     private Integer orderCount;//订单数量
     private BigDecimal orderAmount;//订单金额
     private Integer userId;//用户id
-    private Integer userStatus;//订单状态
+    private Integer orderStatus;//订单状态
     private Date createTime;//创建时间
     private Date UpdateTime;//更新时间
     private String comment;//备注
@@ -23,22 +24,31 @@ public class Order {
     public Order() {
     }
 
-    public Order(Integer orderId, Integer orderCount, BigDecimal orderAmount, Integer userId, Integer userStatus, Date createTime, Date updateTime, String comment) {
-        this.orderId = orderId;
+    public Order(Long orderNumber, Integer orderCount, BigDecimal orderAmount, Integer userId, Integer orderStatus) {
+        this.orderNumber = orderNumber;
         this.orderCount = orderCount;
         this.orderAmount = orderAmount;
         this.userId = userId;
-        this.userStatus = userStatus;
-        this.createTime = createTime;
-        UpdateTime = updateTime;
-        this.comment = comment;
+        this.orderStatus = orderStatus;
     }
 
-    public Order(Integer orderId, Integer orderCount, BigDecimal orderAmount, Integer userStatus) {
+    public Order(Integer orderId, Integer orderCount, BigDecimal orderAmount, Integer orderStatus) {
         this.orderId = orderId;
         this.orderCount = orderCount;
         this.orderAmount = orderAmount;
-        this.userStatus = userStatus;
+        this.orderStatus = orderStatus;
+    }
+
+    public Order(Integer orderId, Long orderNumber, Integer orderCount, BigDecimal orderAmount, Integer userId, Integer orderStatus, Date createTime, Date updateTime, String comment) {
+        this.orderId = orderId;
+        this.orderNumber = orderNumber;
+        this.orderCount = orderCount;
+        this.orderAmount = orderAmount;
+        this.userId = userId;
+        this.orderStatus = orderStatus;
+        this.createTime = createTime;
+        UpdateTime = updateTime;
+        this.comment = comment;
     }
 
     public Integer getOrderId() {
@@ -73,12 +83,12 @@ public class Order {
         this.userId = userId;
     }
 
-    public Integer getUserStatus() {
-        return userStatus;
+    public Integer getOrderStatus() {
+        return orderStatus;
     }
 
-    public void setUserStatus(Integer userStatus) {
-        this.userStatus = userStatus;
+    public void setOrderStatus(Integer orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     public Date getCreateTime() {
@@ -105,14 +115,23 @@ public class Order {
         this.comment = comment;
     }
 
+    public Long getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(Long orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
     @Override
     public String toString() {
-        return "order{" +
+        return "Order{" +
                 "orderId=" + orderId +
+                ", orderNumber=" + orderNumber +
                 ", orderCount=" + orderCount +
                 ", orderAmount=" + orderAmount +
                 ", userId=" + userId +
-                ", userStatus=" + userStatus +
+                ", orderStatus=" + orderStatus +
                 ", createTime=" + createTime +
                 ", UpdateTime=" + UpdateTime +
                 ", comment='" + comment + '\'' +

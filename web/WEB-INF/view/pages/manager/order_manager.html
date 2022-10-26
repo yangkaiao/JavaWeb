@@ -40,57 +40,22 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>12354456895</td>
-              <td>
+            <tr th:each="item : ${orderList}">
+              <td th:text="${item.orderNumber}">12354456895</td>
+              <td th:text="${item.createTime}">
                 2015.04.23
               </td>
-              <td>90.00</td>
-              <td>88</td>
-              <td><a href="">查看详情</a></td>
-              <td><a href="" class="send">等待发货</a></td>
-            </tr>
-            <tr>
-              <td>12354456895</td>
+              <td th:text="${item.orderAmount}">90.00</td>
+              <td th:text="${item.orderCount}">88</td>
+              <td><a th:href="@{Order(method='order_Admin_details',orderId = ${item.orderId})}">查看详情</a></td>
               <td>
-                2015.04.23
+                <a href="" class="send" th:if="${item.orderStatus == 0}">未发货</a>
+                <a href="" class="send" th:if="${item.orderStatus == 1}">等待发货</a>
+                <a href="" class="send" th:if="${item.orderStatus == 2 }">已发货</a>
               </td>
-              <td>90.00</td>
-              <td>88</td>
-              <td><a href="">查看详情</a></td>
-              <td><a href="" class="send">已发货</a></td>
-            </tr>
-            <tr>
-              <td>12354456895</td>
-              <td>
-                2015.04.23
-              </td>
-              <td>90.00</td>
-              <td>88</td>
-              <td><a href="">查看详情</a></td>
-              <td><a href="">点击发货</a></td>
             </tr>
           </tbody>
         </table>
-        <div class="footer">
-          <div class="footer-right">
-            <div>首页</div>
-            <div>上一页</div>
-            <ul>
-              <li class="active">1</li>
-              <li>2</li>
-              <li>3</li>
-            </ul>
-            <div>下一页</div>
-            <div>末页</div>
-            <span>共10页</span>
-            <span>30条记录</span>
-            <span>到第</span>
-            <input type="text" />
-            <span>页</span>
-            <button>确定</button>
-          </div>
-        </div>
       </div>
     </div>
     <div class="bottom">

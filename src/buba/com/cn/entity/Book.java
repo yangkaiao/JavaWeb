@@ -13,7 +13,7 @@ import java.sql.Date;
 public class Book {
     private Integer bookId;//图书id
     private String name;//图书名称
-    private Double price;//图书价格
+    private BigDecimal price;//图书价格
     private String author;//图书作者
     private Integer sales;//图书销量
     private Integer stock;//图书库存
@@ -29,7 +29,7 @@ public class Book {
         this.bookId = bookId;
     }
 
-    public Book(Integer bookId, String name, Double price, String author, Integer sales, Integer stock) {
+    public Book(Integer bookId, String name, BigDecimal price, String author, Integer sales, Integer stock) {
         this.bookId = bookId;
         this.name = name;
         this.price = price;
@@ -38,7 +38,7 @@ public class Book {
         this.stock = stock;
     }
 
-    public Book(Integer bookId, String name, Double price, String author, Integer sales, Integer stock, String imgPath, Date createTime, Date updateTime, String comment) {
+    public Book(Integer bookId, String name, BigDecimal price, String author, Integer sales, Integer stock, String imgPath, Date createTime, Date updateTime, String comment) {
         this.bookId = bookId;
         this.name = name;
         this.price = price;
@@ -51,7 +51,7 @@ public class Book {
         this.comment = comment;
     }
 
-    public Book(String name, Double price, String author, Integer sales, Integer stock) {
+    public Book(String name, BigDecimal price, String author, Integer sales, Integer stock) {
         this.name = name;
         this.price = price;
         this.author = author;
@@ -75,11 +75,11 @@ public class Book {
         this.name = name;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

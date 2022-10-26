@@ -109,8 +109,9 @@ public class UserServlet extends ViewBaseServlet {
             req.getSession().setAttribute("username",username);
             System.out.println(user);
 
-            //一个用户一个购物车
+            //每次登录成功后 重新更新一下数据的
             Cart cart = cartItemService.getCart(user);
+            //一个用户一个购物车
             user.setCart(cart);
             System.out.println(cart);
 //            //登录成功后把user对象存在会话域中,在购物车中有使用到
