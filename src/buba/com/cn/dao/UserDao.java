@@ -15,4 +15,8 @@ public interface UserDao {
 
     //通过账号密码查user对象
     User selectUser(String username,String password);
+
+
+    //通过用户id查询
+    User findUserId(Integer userId);
 }

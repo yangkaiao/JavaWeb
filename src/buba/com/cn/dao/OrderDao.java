@@ -26,4 +26,7 @@ public interface OrderDao {
 
     //后台管理的订单查找全部
     List<Order> findOrder();
+
+    //修改订单状态 是否发货
+    int updateOrderStatus(Integer orderId,Integer status);
 }

@@ -77,4 +77,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+    //修改订单状态 是否发货
+    @Override
+    public int updateOrderStatus(Integer orderId, Integer status) {
+        return orderDao.updateOrderStatus(orderId,status);
+    }
+
+
 }

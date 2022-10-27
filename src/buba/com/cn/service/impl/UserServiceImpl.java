@@ -37,4 +37,10 @@ public class UserServiceImpl implements UserService {
     public User selectUser(String username, String password) {
         return userDao.selectUser(username,password);
     }
+
+    //通过id查询
+    @Override
+    public User findUserId(Integer userId) {
+        return userDao.findUserId(userId);
+    }
 }

@@ -53,4 +53,13 @@ public class UserDaoImpl implements UserDao {
         User user = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), username, password);
         return user;
     }
+
+    //通过用户id查询
+    @Override
+    public User findUserId(Integer userId) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(JDBCUtils.getDateSource());
+        String sql = "select * from t_user where user_id = ?";
+        User user = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), userId);
+        return user;
+    }
 }

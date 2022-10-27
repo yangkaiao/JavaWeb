@@ -84,4 +84,14 @@ public class OrderDaoImpl implements OrderDao {
     }
 
 
+    //修改订单状态 是否发货
+    @Override
+    public int updateOrderStatus(Integer orderId, Integer status) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(JDBCUtils.getDateSource());
+        String sql = "update t_order set order_status = ? where order_id = ?";
+        int update = jdbcTemplate.update(sql, status,orderId);
+        return update;
+    }
+
+
 }
